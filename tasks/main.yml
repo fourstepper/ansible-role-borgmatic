@@ -1,0 +1,27 @@
+---
+# tasks file for ansible-role-borgmatic
+
+# - Installs `borgmatic` on Debian/Fedora/Ubuntu/MacOS based on os family
+# - [Configuration files](https://torsion.org/borgmatic/docs/how-to/make-per-application-backups/) taken from relative to the playbook from where the role is called (e.g. `files/borgmatic/*.yaml`) and put under `/etc/borgmatic.d/*`
+# - Enables the `borgmatic.timer` if on Linux
+# - Writes down some instructions for the user in the form of a handler (i.e. run the backup and look at the progress using journalctl)
+
+- name: Install Borgmatic (Linux)
+  package:
+    name: borgmatic
+    state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install Borgmatic (MacOS)
+  homebrew:
+    name: borgmatic
+    state: present
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Make sure the borgmatic configs directory structure is set up
+  file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - "/etc/borgmatic/"
+    - "/etc/borgmatic.d/"

@@ -1,0 +1,20 @@
+galaxy_info:
+  author: Robin Opletal
+  description: An Ansible role for setting up periodic backups using borg and borgmatic
+
+  license: MIT
+
+  min_ansible_version: 2.1
+
+  platforms:
+    - name: Debian
+      versions:
+        - latest
+    - name: Fedora
+      versions:
+        - latest
+    - name: MacOS
+      versions:
+        - latest
+
+  galaxy_tags: ["borg", "borgmatic", "backups"]
