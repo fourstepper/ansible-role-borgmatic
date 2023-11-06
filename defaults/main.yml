@@ -2,7 +2,7 @@
 # defaults file for ansible-role-borgmatic
 borgmatic_python_base:
   - python3
-  - python3-pip
+  - pipx
 # either none, repokey, repokey-blake2, authenticated or authenticated-blake2
 # Read https://borgbackup.readthedocs.io/en/stable/usage/init.html#more-encryption-modes
 borgmatic_encryption_mode: none
