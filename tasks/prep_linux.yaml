@@ -1,0 +1,15 @@
+- name: Make sure Python3 is installed
+  package:
+    name: "{{ borgmatic_python_base }}"
+    state: present
+
+- name: Download the systemd files
+  ansible.builtin.get_url:
+    url: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item | basename }}"
+    mode: '0440'
+  notify:
+    - enable the borgmatic systemd timer
+  with_items:
+    - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.service
+    - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.timer

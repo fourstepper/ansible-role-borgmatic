@@ -1,24 +1,16 @@
 ---
-# tasks file for ansible-role-borgmatic
-
-# - Installs `borgmatic` on Debian/Fedora/Ubuntu/MacOS based on os family
-# - [Configuration files](https://torsion.org/borgmatic/docs/how-to/make-per-application-backups/) taken from relative to the playbook from where the role is called (e.g. `files/borgmatic/*.yaml`) and put under `/etc/borgmatic.d/*`
-# - Enables the `borgmatic.timer` if on Linux
-# - Writes down some instructions for the user in the form of a handler (i.e. run the backup and look at the progress using journalctl)
-
-- name: Install Borgmatic (Linux)
-  package:
-    name: borgmatic
-    state: present
+- include_tasks: prep_linux.yaml
   when: |
     ansible_facts['os_family'] == 'Debian' or
     ansible_facts['os_family'] == 'Redhat'
 
-- name: Install Borgmatic (MacOS)
-  homebrew:
+- include_tasks: prep_macos.yaml
+  when: ansible_facts['os_family'] == 'Darwin'
+
+- name: Install borgmatic
+  community.general.pipx:
     name: borgmatic
     state: present
-  when: ansible_facts['os_family'] == 'Darwin'
 
 - name: Make sure the borgmatic configs directory structure is set up
   file:
@@ -32,14 +24,13 @@
   template:
     src: "{{ item }}"
     dest: "/etc/borgmatic.d/{{ item | basename }}"
-    validate: 'validate-borgmatic-config -c %s'
   with_fileglob: "{{ playbook_dir }}/files/borgmatic/*.yaml"
 
-- name: Make sure that the daily systemd timer is enabled (Linux)
-  systemd_service:
-    name: borgmatic.timer
-    state: started
-    enabled: true
-  when: |
-    ansible_facts['os_family'] == 'Debian' or
-    ansible_facts['os_family'] == 'Redhat'
+- name: Initialize borgmatic
+  command:
+    cmd: "borgmatic init --encryption {{ borgmatic_encryption_mode }}"
+  register: init
+  changed_when: false
+  failed_when:
+    - "'Failed to create/acquire the lock' not in init.stderr"
+    - - init.rc != 0
