@@ -4,8 +4,9 @@ An alternative, simple role that works as an alternative to https://github.com/b
 
 Differences to the above-mentioned role:
 
-- Uses system packages instead of `pip` (`brew` on MacOS)
 - Works on MacOS as well
+- Is fundamentally simpler
+- Is more extensible going into the future
 
 ## Role Variables
 
