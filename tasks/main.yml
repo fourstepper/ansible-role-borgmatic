@@ -25,12 +25,13 @@
     src: "{{ item }}"
     dest: "/etc/borgmatic.d/{{ item | basename }}"
   with_fileglob: "{{ playbook_dir }}/files/borgmatic/*.yaml"
+  register: config
 
 - name: Initialize borgmatic
   command:
     cmd: "borgmatic init --encryption {{ borgmatic_encryption_mode }}"
   register: init
-  changed_when: false
+  when: config.changed
   failed_when:
     - "'Failed to create/acquire the lock' not in init.stderr"
-    - - init.rc != 0
+    - init.rc != 0
