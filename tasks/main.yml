@@ -33,7 +33,7 @@
     src: "{{ item }}"
     dest: "/etc/borgmatic.d/{{ item | basename }}"
     mode: "0400"
-  with_fileglob: "{{ playbook_dir }}/files/borgmatic/*.yaml"
+  with_fileglob: "{{ playbook_dir }}/files/borgmatic/*.y*ml"
   register: config
 
 - name: Initialize borgmatic
