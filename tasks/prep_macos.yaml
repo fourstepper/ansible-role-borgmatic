@@ -1,7 +1,0 @@
-- name: Make sure Python3 is installed
-  brew:
-    name: "{{ item }}"
-    state: present
-  with_items:
-    - python3
-    - pipx

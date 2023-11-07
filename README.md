@@ -6,14 +6,18 @@ Differences to the above-mentioned role:
 
 - Is fundamentally simpler
 - Supports multiple repositories with different settings
+- ~~Works on MacOS as well~~ This isn't and
+  [seems like it won't be](https://projects.torsion.org/borgmatic-collective/borgmatic/issues/293)
+  the case anytime soon
 
 ## Role Variables
 
 Best to check out `defaults/main.yaml`
 
-## Example Playbook
+## How to run
 
-Not yet ready
+The role expects to find either one or more borgmatic configuration files
+in `"{{ playbook_dir }}/files/borgmatic/*.yaml"`
 
 ## License
 
