@@ -4,9 +4,8 @@ An alternative, simple role that works as an alternative to https://github.com/b
 
 Differences to the above-mentioned role:
 
-- Works on MacOS as well
 - Is fundamentally simpler
-- Is more extensible going into the future
+- Supports multiple repositories with different settings
 
 ## Role Variables
 
