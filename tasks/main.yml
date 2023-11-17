@@ -1,7 +1,7 @@
 ---
-- name: Make sure borgmatic Python base is installed
+- name: Make sure base packages for borg and borgmatic are installed
   package:
-    name: "{{ borgmatic_python_base }}"
+    name: "{{ borgmatic_base_packages[ansible_facts['os_family']] }}"
     state: present
 
 - name: Download the systemd files
@@ -15,10 +15,22 @@
     - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.service
     - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.timer
 
-- name: Install borgmatic
+- name: Pipx ensure path
+  command:
+    cmd: pipx ensurepath
+  changed_when: false
+
+- name: Make sure pkg-config is installed
+  package:
+    name: pkg-config
+
+- name: Make sure borgmatic and borgbackup are installed
   community.general.pipx:
-    name: borgmatic
+    name: "{{ item }}"
     state: present
+  with_items:
+    - borgmatic
+    - borgbackup
 
 - name: Make sure the borgmatic configs directory structure is set up
   file:
