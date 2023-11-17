@@ -15,7 +15,7 @@
     - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.service
     - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.timer
 
-- name: Pipx ensure path
+- name: Ensure pipx path
   command:
     cmd: pipx ensurepath
   changed_when: false
@@ -24,13 +24,15 @@
   package:
     name: pkg-config
 
-- name: Make sure borgmatic and borgbackup are installed
-  community.general.pipx:
-    name: "{{ item }}"
+- name: Make sure borg is installed
+  ansible.builtin.pip:
+    name: borgbackup
     state: present
-  with_items:
-    - borgmatic
-    - borgbackup
+
+- name: Make sure borgmatic is installed
+  community.general.pipx:
+    name: borgmatic
+    state: present
 
 - name: Make sure the borgmatic configs directory structure is set up
   file:
