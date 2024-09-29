@@ -1,4 +1,5 @@
 ---
+# this is kind of unnecessary right now as we just install borgbackup and borgmatic from packages
 borgmatic_base_packages:
   Debian:
   - libssl-dev

@@ -4,33 +4,18 @@
     name: "{{ borgmatic_base_packages[ansible_facts['os_family']] }}"
     state: present
 
-- name: Download the systemd files
-  ansible.builtin.get_url:
-    url: "{{ item }}"
-    dest: "/etc/systemd/system/{{ item | basename }}"
-    mode: '0440'
-  notify:
-    - enable the borgmatic systemd timer
-  with_items:
-    - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.service
-    - https://projects.torsion.org/borgmatic-collective/borgmatic/raw/branch/main/sample/systemd/borgmatic.timer
-
 - name: Ensure pipx path
   command:
     cmd: pipx ensurepath
   changed_when: false
 
-- name: Make sure pkg-config is installed
-  package:
-    name: pkg-config
-
 - name: Make sure borg is installed
-  ansible.builtin.pip:
+  package:
     name: borgbackup
     state: present
 
 - name: Make sure borgmatic is installed
-  community.general.pipx:
+  package:
     name: borgmatic
     state: present
 
